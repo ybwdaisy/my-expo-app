@@ -16,20 +16,17 @@ public class MyExpoSettingsModule: Module {
     ])
 
     // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+    Events("onChangeTheme")
 
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
+    Function("setTheme") { (theme: Theme) -> Void in
+      UserDefaults.standard.set(theme.rawValue, forKey:"theme")
+      sendEvent("onChangeTheme", [
+        "theme": theme.rawValue
+      ])
     }
 
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
+    Function("getTheme") { () -> String in
+      UserDefaults.standard.string(forKey: "theme") ?? Theme.system.rawValue
     }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of the
@@ -40,5 +37,11 @@ public class MyExpoSettingsModule: Module {
         print(prop)
       }
     }
+  }
+
+  enum Theme: String, Enumerable {
+    case light
+    case dark
+    case system
   }
 }

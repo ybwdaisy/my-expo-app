@@ -1,8 +1,17 @@
 package expo.modules.myexposettings
 
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.os.bundleOf
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import expo.modules.kotlin.types.Enumerable
 
+enum class Theme(val value: String) : Enumerable {
+  LIGHT("light"),
+  DARK("dark"),
+  SYSTEM("system")
+}
 class MyExpoSettingsModule : Module() {
   // Each module class must implement the definition function. The definition consists of components
   // that describes the module's functionality and behavior.
@@ -19,20 +28,15 @@ class MyExpoSettingsModule : Module() {
     )
 
     // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+    Events("onChangeTheme")
 
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
+    Function("setTheme") { theme: Theme ->
+      getPreferences().edit().putString("theme", theme.value).commit()
+      this@MyExpoSettingsModule.sendEvent("onChangeTheme", bundleOf("theme" to theme.value))
     }
 
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
+    Function("getTheme") {
+      return@Function getPreferences().getString("theme", Theme.SYSTEM.value)
     }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of
@@ -44,4 +48,12 @@ class MyExpoSettingsModule : Module() {
       }
     }
   }
+
+  private val context
+  get() = requireNotNull(appContext.reactContext)
+
+  private fun getPreferences(): SharedPreferences {
+    return context.getSharedPreferences(context.packageName + ".settings", Context.MODE_PRIVATE)
+  }
 }
+

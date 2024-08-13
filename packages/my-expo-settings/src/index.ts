@@ -4,13 +4,17 @@ import { NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-cor
 // and on native platforms to MyExpoSettings.ts
 import MyExpoSettingsModule from './MyExpoSettingsModule';
 import MyExpoSettingsView from './MyExpoSettingsView';
-import { ChangeEventPayload, MyExpoSettingsViewProps } from './MyExpoSettings.types';
+import { ThemeChangeEvent, Theme } from './MyExpoSettings.types';
 
 // Get the native constant value.
 export const PI = MyExpoSettingsModule.PI;
 
-export function hello(): string {
-  return MyExpoSettingsModule.hello();
+export function getTheme(): Theme {
+  return MyExpoSettingsModule.getTheme();
+}
+
+export function setTheme(theme: Theme): void {
+  return MyExpoSettingsModule.setTheme(theme);
 }
 
 export async function setValueAsync(value: string) {
@@ -19,8 +23,8 @@ export async function setValueAsync(value: string) {
 
 const emitter = new EventEmitter(MyExpoSettingsModule ?? NativeModulesProxy.MyExpoSettings);
 
-export function addChangeListener(listener: (event: ChangeEventPayload) => void): Subscription {
-  return emitter.addListener<ChangeEventPayload>('onChange', listener);
+export function addThemeListener(listener: (event: ThemeChangeEvent) => void): Subscription {
+  return emitter.addListener<ThemeChangeEvent>('onChangeTheme', listener);
 }
 
-export { MyExpoSettingsView, MyExpoSettingsViewProps, ChangeEventPayload };
+export { MyExpoSettingsView, ThemeChangeEvent, Theme };
