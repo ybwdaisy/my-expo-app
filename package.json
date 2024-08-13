@@ -1,0 +1,9 @@
+{
+  "name": "my-expo-apps",
+  "version": "1.0.0",
+  "repository": "git@github.com:ybwdaisy/my-expo-apps.git",
+  "author": "ybwdaisy@gmail.com",
+  "license": "MIT",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"]
+}
