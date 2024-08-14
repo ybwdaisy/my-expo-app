@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "my-expo-settings",
+    "slug": "my-expo-settings",
+    "version": "0.1.0",
+    "description": "My Expo Settings Module",
+    "sdkVersion": "51.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ]
+  }
+}
