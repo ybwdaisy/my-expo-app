@@ -4,6 +4,5 @@
   "repository": "git@github.com:ybwdaisy/my-expo-apps.git",
   "author": "ybwdaisy@gmail.com",
   "license": "MIT",
-  "private": true,
-  "workspaces": ["apps/*", "packages/*"]
+  "private": true
 }
